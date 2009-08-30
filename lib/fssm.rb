@@ -12,6 +12,7 @@ module FSSM
   end
 end
 
+$:.unshift(File.dirname(__FILE__))
 require 'pathname'
 require 'fssm/ext'
 require 'fssm/support'
@@ -21,3 +22,5 @@ require 'fssm/monitor'
 
 require "fssm/backends/#{FSSM::Support.backend.downcase}"
 FSSM::Backends::Default = FSSM::Backends.const_get(FSSM::Support.backend)
+$:.shift
+
