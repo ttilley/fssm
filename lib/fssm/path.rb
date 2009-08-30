@@ -50,7 +50,7 @@ class FSSM::Path
   end
   
   def set_callback(type, arg)
-    raise ArgumentError unless arg.is_a?(Proc)
+    raise ArgumentError, "Proc expected" unless arg.is_a?(Proc)
     @callbacks[type] = arg
   end
   
@@ -63,8 +63,8 @@ class FSSM::Path
     
     begin
       @callbacks[type].call(base, relative)
-    rescue Exception
-      raise FSSM::CallbackError("#{type} - #{base.join(relative)}")
+    rescue Exception => e
+      raise FSSM::CallbackError, "#{type} - #{base.join(relative)}: #{e.message}", e.backtrace
     end
   end
   
@@ -75,7 +75,7 @@ class FSSM::Path
   
   def set_path(path)
     path = Pathname.for(path)
-    raise FSSM::FileNotFoundError("#{path}") unless path.exist?
+    raise FSSM::FileNotFoundError, "#{path}" unless path.exist?
     @path = path.realpath
   end
   
