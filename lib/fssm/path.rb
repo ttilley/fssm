@@ -3,8 +3,11 @@ class FSSM::Path
     set_path(path || '.')
     set_glob(glob || '**/*')
     init_callbacks
-    
-    self.instance_eval(&block) if block_given?
+    if block && block.arity == 0
+      self.instance_eval(&block)
+    elsif block && block.arity == 1
+      block.call(self)
+    end
   end
   
   def to_s
@@ -50,7 +53,7 @@ class FSSM::Path
   end
   
   def set_callback(type, arg)
-    raise ArgumentError unless arg.is_a?(Proc)
+    raise ArgumentError, "Proc expected" unless arg.is_a?(Proc)
     @callbacks[type] = arg
   end
   
@@ -63,8 +66,8 @@ class FSSM::Path
     
     begin
       @callbacks[type].call(base, relative)
-    rescue Exception
-      raise FSSM::CallbackError("#{type} - #{base.join(relative)}")
+    rescue Exception => e
+      raise FSSM::CallbackError, "#{type} - #{base.join(relative)}: #{e.message}", e.backtrace
     end
   end
   
@@ -75,7 +78,7 @@ class FSSM::Path
   
   def set_path(path)
     path = Pathname.for(path)
-    raise FSSM::FileNotFoundError("#{path}") unless path.exist?
+    raise FSSM::FileNotFoundError, "#{path}" unless path.exist?
     @path = path.realpath
   end
   

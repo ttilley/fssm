@@ -6,7 +6,11 @@ class FSSM::Monitor
   
   def path(*args, &block)
     path = FSSM::Path.new(*args)
-    path.instance_eval(&block) if block_given?
+    if block && block.arity == 0
+      path.instance_eval(&block)
+    elsif block && block.arity == 1
+      block.call(path)
+    end
     @backend.add_path(path)
     path
   end
