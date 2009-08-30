@@ -1,11 +1,7 @@
 module FSSM::Support
   class << self
-    # def backend
-    #   (mac? && carbon_core?) ? 'FSEvents' : 'Polling'
-    # end
-    
     def backend
-      'Polling'
+      (mac? && carbon_core?) ? 'FSEvents' : 'Polling'
     end
     
     def mac?
