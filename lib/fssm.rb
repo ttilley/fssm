@@ -1,3 +1,6 @@
+dir = File.dirname(__FILE__)
+$LOAD_PATH.unshift dir unless $LOAD_PATH.include?(dir)
+
 module FSSM
   FileNotFoundError = Class.new(StandardError)
   CallbackError = Class.new(StandardError)
@@ -6,17 +9,20 @@ module FSSM
     def monitor(*args, &block)
       monitor = FSSM::Monitor.new
       context = args.empty? ? monitor : monitor.path(*args)
-      if block && block.arity == 0
-        context.instance_eval(&block)
-      elsif block && block.arity == 1
-        block.call(context)
+      
+      if block_given?
+        if block.arity == 1
+          block.call(context)
+        else
+          context.instance_eval(&block)
+        end
       end
+      
       monitor.run
     end
   end
 end
 
-$:.unshift(File.dirname(__FILE__))
 require 'pathname'
 require 'fssm/ext'
 require 'fssm/support'
@@ -27,5 +33,3 @@ require 'fssm/monitor'
 
 require "fssm/backends/#{FSSM::Support.backend.downcase}"
 FSSM::Backends::Default = FSSM::Backends.const_get(FSSM::Support.backend)
-$:.shift
-

@@ -3,10 +3,13 @@ class FSSM::Path
     set_path(path || '.')
     set_glob(glob || '**/*')
     init_callbacks
-    if block && block.arity == 0
-      self.instance_eval(&block)
-    elsif block && block.arity == 1
-      block.call(self)
+        
+    if block_given?      
+      if block.arity == 1
+        block.call(self)
+      else
+        self.instance_eval(&block)
+      end
     end
   end
   
