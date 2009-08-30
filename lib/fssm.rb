@@ -6,7 +6,11 @@ module FSSM
     def monitor(*args, &block)
       monitor = FSSM::Monitor.new
       context = args.empty? ? monitor : monitor.path(*args)
-      context.instance_eval(&block) if block_given?
+      if block && block.arity == 0
+        context.instance_eval(&block)
+      elsif block && block.arity == 1
+        block.call(context)
+      end
       monitor.run
     end
   end
