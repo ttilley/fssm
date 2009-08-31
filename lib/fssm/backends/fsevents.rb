@@ -16,11 +16,9 @@ module FSSM::Backends
       cb = lambda do |stream, context, number, paths, flags, ids|
         paths.regard_as('*')
         watched = OSX.FSEventStreamCopyPathsBeingWatched(stream).first
-        @handlers["#{watched}"].refresh
-        # TODO: support this level of granularity
-        # number.times do |n|
-        #   @handlers["#{watched}"].refresh_path(paths[n])
-        # end
+        number.times do |n|
+          @handlers["#{watched}"].refresh(paths[n])
+        end
       end
       
       @streams << create_stream(cb, "#{path}")
