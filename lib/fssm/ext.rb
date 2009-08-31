@@ -4,7 +4,7 @@ class Pathname
       path.is_a?(Pathname) ? path : new(path)
     end
   end
-  
+
   def names
     prefix, names = split_names(@path)
     names

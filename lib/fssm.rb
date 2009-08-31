@@ -4,12 +4,12 @@ $LOAD_PATH.unshift dir unless $LOAD_PATH.include?(dir)
 module FSSM
   FileNotFoundError = Class.new(StandardError)
   CallbackError = Class.new(StandardError)
-  
+
   class << self
     def monitor(*args, &block)
       monitor = FSSM::Monitor.new
       context = args.empty? ? monitor : monitor.path(*args)
-      
+
       if block_given?
         if block.arity == 1
           block.call(context)
@@ -17,7 +17,7 @@ module FSSM
           context.instance_eval(&block)
         end
       end
-      
+
       monitor.run
     end
   end
