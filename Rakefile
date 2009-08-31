@@ -4,7 +4,7 @@ require 'rake'
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
-    gem.name = "fsstate"
+    gem.name = "fssm"
     gem.summary = %Q{file system state monitor}
     gem.description = %Q{file system state monitor}
     gem.email = "ttilley@gmail.com"
