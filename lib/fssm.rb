@@ -25,6 +25,7 @@ end
 
 require 'thread'
 require 'pathname'
+
 require 'fssm/ext'
 require 'fssm/support'
 require 'fssm/cache'

@@ -1,3 +1,4 @@
+require 'yaml'
 class FSSM::State
   def initialize(path, preload=true)
     @path = path
