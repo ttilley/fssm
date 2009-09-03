@@ -23,6 +23,7 @@ module FSSM
   end
 end
 
+require 'thread'
 require 'pathname'
 require 'fssm/ext'
 require 'fssm/support'

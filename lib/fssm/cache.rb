@@ -6,12 +6,28 @@ class FSSM::Cache
       @children = Hash.new
     end
 
+    def each(prefix='./', &block)
+      @children.each do |segment, node|
+        cprefix = Pathname.for(prefix.dup).join(segment)
+        block.call(cprefix, node)
+        node.each(cprefix, &block)
+      end
+    end
+
+    protected
+    
+    def with_lock
+      @mutex.lock
+      yield
+      @mutex.unlock
+    end
+    
     def descendant(path)
-      recurse_on_key(sanitize_key(path), false)
+      recurse_on_key(path, false)
     end
 
     def descendant!(path)
-      recurse_on_key(sanitize_key(path), true)
+      recurse_on_key(path, true)
     end
 
     def child(segment)
@@ -33,16 +49,6 @@ class FSSM::Cache
     def remove_children
       @children.clear
     end
-
-    def each(prefix='./', &block)
-      @children.each do |segment, node|
-        cprefix = Pathname.for(prefix.dup).join(segment)
-        block.call(cprefix, node)
-        node.each(cprefix, &block)
-      end
-    end
-
-    private
 
     def recurse_on_key(key, create)
       key = sanitize_key(key)
@@ -99,7 +105,7 @@ class FSSM::Cache
       @ftype = path.ftype
     end
 
-    private
+    protected
 
     def sanitize_key(key)
       key_for_path(relative_path(key))
@@ -107,39 +113,43 @@ class FSSM::Cache
   end
 
   include Common
-
-  def clear
-    @children.clear
+  
+  def initialize
+    @mutex = Mutex.new
+    super
   end
 
-  alias get descendant
+  def clear
+    @mutex.lock
+    @children.clear
+    @mutex.unlock
+  end
 
   def set(path)
     unset(path)
     node = descendant!(path)
     node.from_path(path)
-    node
+    node.mtime
   end
 
-  def unset(path='/')
+  def unset(path='/')    
     key = sanitize_key(path)
 
     if key.empty?
       self.clear
       return nil
     end
-
+    
     segment = key.pop
     node = descendant(key)
 
     return unless node
-
+    
+    @mutex.lock
     node.remove_child(segment)
-  end
-
-  def each(&block)
-    prefix='/'
-    super(prefix, &block)
+    @mutex.unlock    
+    
+    nil
   end
 
   def files
@@ -150,7 +160,12 @@ class FSSM::Cache
     ftype('directory')
   end
 
-  private
+  protected
+  
+  def each(&block)
+    prefix='/'
+    super(prefix, &block)
+  end
 
   def ftype(ft)
     inject({}) do |hash, entry|
@@ -158,6 +173,18 @@ class FSSM::Cache
       hash["#{path}"] = node.mtime if node.ftype == ft
       hash
     end
+  end
+  
+  def descendant(path)
+    node = recurse_on_key(path, false)
+    node
+  end
+
+  def descendant!(path)
+    @mutex.lock
+    node = recurse_on_key(path, true)
+    @mutex.unlock
+    node
   end
 
   def sanitize_key(key)
