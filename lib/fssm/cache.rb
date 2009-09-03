@@ -85,30 +85,18 @@ class FSSM::Cache
 
   class Node
     include Common
-
-    attr_reader :stat
+    
+    attr_accessor :mtime
+    attr_accessor :ftype
 
     def <=>(other)
-      self.stat <=> other.stat
+      self.mtime <=> other.mtime
     end
 
     def from_path(path)
       path = absolute_path(path)
-      @stat = path.stat
-    end
-
-    def method_missing(method, *args)
-      if ("#{method}".match(/(.*)\?$/))
-        return false unless @stat
-        @stat.send(method)
-      else
-        return nil unless @stat
-        unless args.empty?
-          @stat.send(method, args)
-        else
-          @stat.send(method)
-        end
-      end
+      @mtime = path.mtime
+      @ftype = path.ftype
     end
 
     private
@@ -167,7 +155,7 @@ class FSSM::Cache
   def ftype(ft)
     inject({}) do |hash, entry|
       path, node = entry
-      hash["#{path}"] = node.stat if node.ftype == ft
+      hash["#{path}"] = node.mtime if node.ftype == ft
       hash
     end
   end
