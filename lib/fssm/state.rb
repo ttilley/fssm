@@ -2,7 +2,7 @@ require 'yaml'
 class FSSM::State
   def initialize(path, preload=true)
     @path = path
-    @cache = FSSM::Cache.new
+    @cache = FSSM::Tree::Cache.new
     snapshot(@path.to_pathname) if preload
   end
 

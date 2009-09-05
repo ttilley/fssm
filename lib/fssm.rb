@@ -28,7 +28,7 @@ require 'pathname'
 
 require 'fssm/ext'
 require 'fssm/support'
-require 'fssm/cache'
+require 'fssm/tree'
 require 'fssm/path'
 require 'fssm/state'
 require 'fssm/monitor'
