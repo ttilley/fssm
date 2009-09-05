@@ -8,7 +8,7 @@ begin
     gem.summary = %Q{file system state monitor}
     gem.description = %Q{file system state monitor}
     gem.email = "ttilley@gmail.com"
-    gem.homepage = "http://github.com/ttilley/fsstate"
+    gem.homepage = "http://github.com/ttilley/fssm"
     gem.authors = ["Travis Tilley"]
     gem.add_development_dependency "rspec"
     gem.add_development_dependency "yard"
