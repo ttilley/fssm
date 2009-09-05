@@ -27,19 +27,6 @@ module FSSM::Tree
     end
   end
   
-  module NodeKey
-    protected
-    
-    def key_segments(key)
-      return key if key.is_a?(Array)
-      pathname(key).segments
-    end
-    
-    def pathname(path)
-      Pathname.for(path)
-    end
-  end
-  
   module NodeEnumerable
     include NodeBase
     include Enumerable
@@ -57,7 +44,6 @@ module FSSM::Tree
   
   module NodeInsertion
     include NodeBase
-    include NodeKey
     
     def unset(path)
       key = key_segments(path)
@@ -84,6 +70,11 @@ module FSSM::Tree
     
     protected
     
+    def key_segments(key)
+      return key if key.is_a?(Array)
+      Pathname.for(key).segments
+    end
+    
     def descendant(path)
       recurse(path, false)
     end
@@ -103,6 +94,23 @@ module FSSM::Tree
       end
       
       node
+    end
+  end
+  
+  module CacheDebug
+    def set(path)
+      FSSM.dbg("Cache#set(#{path})")
+      super
+    end
+    
+    def unset(path)
+      FSSM.dbg("Cache#unset(#{path})")
+      super
+    end
+    
+    def ftype(ft)
+      FSSM.dbg("Cache#ftype(#{ft})")
+      super
     end
   end
   
@@ -131,8 +139,8 @@ module FSSM::Tree
   class Cache
     include NodeBase
     include NodeEnumerable
-    include NodeKey
     include NodeInsertion
+    include CacheDebug if $DEBUG
     
     def set(path)
       # all paths set from this level need to be absolute
