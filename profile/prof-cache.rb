@@ -1,11 +1,11 @@
-$:.unshift(File.join(File.dirname(__FILE__), 'lib'))
+$:.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 
 require 'fssm'
 
 require 'rubygems'
 require 'ruby-prof'
 
-$test_path = Pathname.new('.')
+$test_path = Pathname.new('..')
 $test_files = Pathname.glob(File.join($test_path, '**', '*'))
 
 RubyProf.start

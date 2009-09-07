@@ -30,7 +30,7 @@ end
 require 'thread'
 require 'pathname'
 
-require 'fssm/ext'
+require 'fssm/pathname'
 require 'fssm/support'
 require 'fssm/tree'
 require 'fssm/path'
