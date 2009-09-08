@@ -2,7 +2,7 @@ module FSSM::Backends
   class Polling
     def initialize(options={})
       @handlers  = []
-      @latency   = options[:latency]   || 1
+      @latency   = options[:latency]   || 1.5
     end
 
     def add_path(path, preload=true)
