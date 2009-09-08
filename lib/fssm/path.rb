@@ -82,7 +82,7 @@ class FSSM::Path
   def set_path(path)
     path = FSSM::Pathname.for(path)
     raise FSSM::FileNotFoundError, "#{path}" unless path.exist?
-    @path = path.realpath
+    @path = path.expand_path
   end
 
   def set_glob(glob)
