@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{fssm}
-  s.version = "0.0.7"
+  s.version = "0.0.8"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Travis Tilley"]
-  s.date = %q{2009-09-07}
+  s.date = %q{2009-09-08}
   s.description = %q{file system state monitor}
   s.email = %q{ttilley@gmail.com}
   s.extra_rdoc_files = [
