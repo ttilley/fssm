@@ -20,11 +20,7 @@ module FSSM
     class << self
       def for(path)
         path = path.is_a?(::FSSM::Pathname) ? path : new(path)
-        
-        ['set', 'segments', 'prefix', 'names'].each do |iv|
-          path.instance_variable_set("@#{iv}", nil)
-        end
-        
+        path.dememo
         path
       end
     end
@@ -33,6 +29,8 @@ module FSSM
       if path =~ %r{\0}
         raise ArgumentError, "path cannot contain ASCII NULLs"
       end
+      
+      dememo
       
       super(path)
     end
@@ -148,7 +146,7 @@ module FSSM
         raise ArgumentError, 'no relative path between a relative and absolute'
       end
       
-      if @prefix != base.prefix
+      if self.prefix != base.prefix
         raise ArgumentError, "different prefix: #{@prefix.inspect} and #{base.prefix.inspect}"
       end
       
@@ -179,10 +177,7 @@ module FSSM
         raise ArgumentError, "path cannot contain ASCII NULLs"
       end
       
-      @set        = nil if @set
-      @segments   = nil if @segments
-      @prefix     = nil if @prefix
-      @names      = nil if @names
+      dememo
       
       super(path)
     end
@@ -203,6 +198,13 @@ module FSSM
     def names
       set_prefix_and_names
       @names
+    end
+    
+    def dememo
+      @set        = nil
+      @segments   = nil
+      @prefix     = nil
+      @names      = nil
     end
     
     private

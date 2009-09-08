@@ -5,8 +5,8 @@ require 'fssm'
 require 'rubygems'
 require 'ruby-prof'
 
-$test_path = Pathname.new('..')
-$test_files = Pathname.glob(File.join($test_path, '**', '*'))
+$test_path = FSSM::Pathname.new('..').expand_path
+$test_files = FSSM::Pathname.glob(File.join($test_path, '**', '*'))
 
 RubyProf.start
 RubyProf.pause

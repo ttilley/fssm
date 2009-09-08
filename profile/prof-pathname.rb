@@ -1,6 +1,7 @@
 $:.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 
 require 'fssm'
+require 'pathname'
 
 require 'rubygems'
 require 'ruby-prof'
