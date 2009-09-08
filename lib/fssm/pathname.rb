@@ -5,10 +5,12 @@ module FSSM
   class Pathname < String
     
     SEPARATOR = Regexp.quote(File::SEPARATOR)
-    SEPARATOR_PAT = Regexp.compile(SEPARATOR)
+    
     if File::ALT_SEPARATOR
       ALT_SEPARATOR = Regexp.quote(File::ALT_SEPARATOR)
       SEPARATOR_PAT = Regexp.compile("[#{SEPARATOR}#{ALT_SEPARATOR}]")
+    else
+      SEPARATOR_PAT = Regexp.compile(SEPARATOR)
     end
     
     if RUBY_PLATFORM =~ /(:?mswin|mingw|bccwin)/
