@@ -28,7 +28,6 @@ module FSSM
 end
 
 require 'thread'
-require 'pathname'
 
 require 'fssm/pathname'
 require 'fssm/support'

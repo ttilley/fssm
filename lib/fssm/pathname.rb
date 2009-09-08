@@ -19,7 +19,13 @@ module FSSM
 
     class << self
       def for(path)
-        path.is_a?(::FSSM::Pathname) ? path : new(path)
+        path = path.is_a?(::FSSM::Pathname) ? path : new(path)
+        
+        ['set', 'segments', 'prefix', 'names'].each do |iv|
+          path.instance_variable_set("@#{iv}", nil)
+        end
+        
+        path
       end
     end
     
@@ -118,15 +124,65 @@ module FSSM
       dup.cleanpath!
     end
     
+    def realpath
+       raise unless self.exist?
+
+       if File.symlink?(self)
+          file = self.dup
+
+          while true
+             file = File.join(File.dirname(file), File.readlink(file))
+             break unless File.symlink?(file)
+          end
+
+          self.class.new(file).clean
+       else
+          self.class.new(Dir.pwd) + self
+       end
+    end
+    
+    def relative_path_from(base)
+      base = self.class.for(base)
+      
+      if self.absolute? != base.absolute?
+        raise ArgumentError, 'no relative path between a relative and absolute'
+      end
+      
+      if @prefix != base.prefix
+        raise ArgumentError, "different prefix: #{@prefix.inspect} and #{base.prefix.inspect}"
+      end
+      
+      base = base.cleanpath!.segments
+      dest = dup.cleanpath!.segments
+      
+      while !dest.empty? && !base.empty? && dest[0] == base[0]
+        base.shift
+        dest.shift
+      end
+      
+      base.shift if base[0] == '.'
+      dest.shift if dest[0] == '.'
+      
+      if base.include?('..')
+        raise ArgumentError, "base directory may not contain '..'"
+      end
+      
+      path = base.fill('..') + dest
+      path = self.class.join(*path)
+      path = self.class.new('.') if path.empty?
+      
+      path
+    end
+    
     def replace(path)      
       if path =~ %r{\0}
         raise ArgumentError, "path cannot contain ASCII NULLs"
       end
       
-      remove_instance_variable("@prefix")     if @prefix
-      remove_instance_variable("@names")      if @names
-      remove_instance_variable("@set")        if @set
-      remove_instance_variable("@segments")   if @segments
+      @set        = nil if @set
+      @segments   = nil if @segments
+      @prefix     = nil if @prefix
+      @names      = nil if @names
       
       super(path)
     end
@@ -137,6 +193,16 @@ module FSSM
     rescue Errno::ENOTDIR
       File.unlink(self)
       true
+    end
+    
+    def prefix
+      set_prefix_and_names
+      @prefix
+    end
+    
+    def names
+      set_prefix_and_names
+      @names
     end
     
     private
