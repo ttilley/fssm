@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{fssm}
-  s.version = "0.0.6"
+  s.version = "0.0.7"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Travis Tilley"]
-  s.date = %q{2009-09-05}
+  s.date = %q{2009-09-07}
   s.description = %q{file system state monitor}
   s.email = %q{ttilley@gmail.com}
   s.extra_rdoc_files = [
@@ -28,14 +28,18 @@ Gem::Specification.new do |s|
      "lib/fssm.rb",
      "lib/fssm/backends/fsevents.rb",
      "lib/fssm/backends/polling.rb",
-     "lib/fssm/ext.rb",
      "lib/fssm/fsevents.rb",
      "lib/fssm/monitor.rb",
      "lib/fssm/path.rb",
+     "lib/fssm/pathname.rb",
      "lib/fssm/state.rb",
      "lib/fssm/support.rb",
      "lib/fssm/tree.rb",
-     "prof-cache.rb",
+     "profile/prof-cache.rb",
+     "profile/prof-fssm-pathname.html",
+     "profile/prof-pathname.rb",
+     "profile/prof-plain-pathname.html",
+     "profile/prof.html",
      "spec/path_spec.rb",
      "spec/root/duck/quack.txt",
      "spec/root/file.css",
