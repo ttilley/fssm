@@ -11,7 +11,6 @@ begin
     gem.homepage = "http://github.com/ttilley/fssm"
     gem.authors = ["Travis Tilley"]
     gem.add_development_dependency "rspec"
-    gem.add_development_dependency "yard"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
 rescue LoadError
@@ -58,12 +57,3 @@ rescue LoadError
 end
 
 task :default => :spec
-
-begin
-  require 'yard'
-  YARD::Rake::YardocTask.new
-rescue LoadError
-  task :yardoc do
-    abort "YARD is not available. In order to run yardoc, you must: sudo gem install yard"
-  end
-end
