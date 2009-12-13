@@ -36,7 +36,7 @@ module FSSM::Tree
         cprefix = prefix ? 
                   FSSM::Pathname.for(prefix).join(segment) :
                   FSSM::Pathname.for(segment)
-        block.call(cprefix, node)
+        block.call([cprefix, node])
         node.each(cprefix, &block)
       end
     end
@@ -165,8 +165,7 @@ module FSSM::Tree
     private
     
     def ftype(ft)
-      inject({}) do |hash, entry|
-        path, node = entry
+      inject({}) do |hash, (path, node)|
         hash["#{path}"] = node.mtime if node.ftype == ft
         hash
       end
