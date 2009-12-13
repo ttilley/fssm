@@ -1,4 +1,4 @@
-require 'fssm/fsevents'
+require File.join(File.dirname(__FILE__), 'rubycocoa/fsevents')
 
 module FSSM::Backends
   class FSEvents
