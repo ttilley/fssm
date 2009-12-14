@@ -13,40 +13,40 @@ Gem::Specification.new do |s|
   s.description = %q{file system state monitor}
   s.email = %q{ttilley@gmail.com}
   s.extra_rdoc_files = [
-    "LICENSE",
-     "README.markdown"
+          "LICENSE",
+          "README.markdown"
   ]
   s.files = [
-    ".document",
-     ".gitignore",
-     "LICENSE",
-     "README.markdown",
-     "Rakefile",
-     "VERSION.yml",
-     "example.rb",
-     "fssm.gemspec",
-     "lib/fssm.rb",
-     "lib/fssm/backends/fsevents.rb",
-     "lib/fssm/backends/polling.rb",
-     "lib/fssm/fsevents.rb",
-     "lib/fssm/monitor.rb",
-     "lib/fssm/path.rb",
-     "lib/fssm/pathname.rb",
-     "lib/fssm/state.rb",
-     "lib/fssm/support.rb",
-     "lib/fssm/tree.rb",
-     "profile/prof-cache.rb",
-     "profile/prof-fssm-pathname.html",
-     "profile/prof-pathname.rb",
-     "profile/prof-plain-pathname.html",
-     "profile/prof.html",
-     "spec/path_spec.rb",
-     "spec/root/duck/quack.txt",
-     "spec/root/file.css",
-     "spec/root/file.rb",
-     "spec/root/file.yml",
-     "spec/root/moo/cow.txt",
-     "spec/spec_helper.rb"
+          ".document",
+          ".gitignore",
+          "LICENSE",
+          "README.markdown",
+          "Rakefile",
+          "VERSION.yml",
+          "example.rb",
+          "fssm.gemspec",
+          "lib/fssm.rb",
+          "lib/fssm/backends/fsevents.rb",
+          "lib/fssm/backends/polling.rb",
+          "lib/fssm/fsevents.rb",
+          "lib/fssm/monitor.rb",
+          "lib/fssm/path.rb",
+          "lib/fssm/pathname.rb",
+          "lib/fssm/state.rb",
+          "lib/fssm/support.rb",
+          "lib/fssm/tree.rb",
+          "profile/prof-cache.rb",
+          "profile/prof-fssm-pathname.html",
+          "profile/prof-pathname.rb",
+          "profile/prof-plain-pathname.html",
+          "profile/prof.html",
+          "spec/path_spec.rb",
+          "spec/root/duck/quack.txt",
+          "spec/root/file.css",
+          "spec/root/file.rb",
+          "spec/root/file.yml",
+          "spec/root/moo/cow.txt",
+          "spec/spec_helper.rb"
   ]
   s.homepage = %q{http://github.com/ttilley/fssm}
   s.rdoc_options = ["--charset=UTF-8"]
@@ -54,9 +54,9 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.3.5}
   s.summary = %q{file system state monitor}
   s.test_files = [
-    "spec/path_spec.rb",
-     "spec/spec_helper.rb",
-     "spec/root/file.rb"
+          "spec/path_spec.rb",
+          "spec/spec_helper.rb",
+          "spec/root/file.rb"
   ]
 
   if s.respond_to? :specification_version then

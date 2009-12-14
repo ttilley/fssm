@@ -16,7 +16,7 @@ cache = FSSM::Tree::Cache.new
 5000.times do |num|
   iteration = "%-5d" % (num + 1)
   print "iteration #{iteration}"
-  
+
   print '!'
   RubyProf.resume
   cache.unset($test_path)
@@ -29,7 +29,7 @@ cache = FSSM::Tree::Cache.new
     cache.set(fn)
     RubyProf.pause
   end
-  
+
   print "\n\n"
 end
 

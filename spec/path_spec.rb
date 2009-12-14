@@ -66,9 +66,9 @@ describe "The File System State Monitor" do
       path.update.should be_a_kind_of(Proc)
       path.delete.should be_a_kind_of(Proc)
       path.create.should be_a_kind_of(Proc)
-      path.update.call('','').should == 'success'
-      path.delete.call('','').should == 'success'
-      path.create.call('','').should == 'success'
+      path.update.call('', '').should == 'success'
+      path.delete.call('', '').should == 'success'
+      path.create.call('', '').should == 'success'
     end
 
   end

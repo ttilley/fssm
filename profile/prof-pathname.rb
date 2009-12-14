@@ -30,7 +30,7 @@ RubyProf.pause
 $iterations.times do |num|
   iteration = "%-6d" % (num + 1)
   puts "FSSM::Pathname iteration #{iteration}"
-  
+
   RubyProf.resume
   p = FSSM::Pathname.new($test_path)
   segments = p.segments
@@ -52,7 +52,7 @@ RubyProf.pause
 $iterations.times do |num|
   iteration = "%-6d" % (num + 1)
   puts "::Pathname iteration #{iteration}"
-  
+
   RubyProf.resume
   p = ::Pathname.new($test_path)
   segments = p.segments
