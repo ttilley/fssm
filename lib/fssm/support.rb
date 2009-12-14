@@ -38,6 +38,7 @@ module FSSM::Support
 
     def rb_inotify?
       begin
+        require 'rubygems'
         require 'rb-inotify'
         true
       rescue LoadError, Gem::LoadError
