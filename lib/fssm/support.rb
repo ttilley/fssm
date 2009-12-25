@@ -6,7 +6,7 @@ module FSSM::Support
       @@backend ||= case
         when mac? && !jruby? && carbon_core?
           'FSEvents'
-        when linux? && rb_inotify?
+        when linux? && !jruby? && rb_inotify?
           'Inotify'
         else
           'Polling'
