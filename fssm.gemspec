@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{fssm}
-  s.version = "0.1.0"
+  s.version = "0.1.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Travis Tilley"]
-  s.date = %q{2009-12-13}
+  s.date = %q{2009-12-25}
   s.description = %q{file system state monitor}
   s.email = %q{ttilley@gmail.com}
   s.extra_rdoc_files = [
@@ -56,8 +56,8 @@ Gem::Specification.new do |s|
   s.summary = %q{file system state monitor}
   s.test_files = [
     "spec/path_spec.rb",
-     "spec/spec_helper.rb",
-     "spec/root/file.rb"
+     "spec/root/file.rb",
+     "spec/spec_helper.rb"
   ]
 
   if s.respond_to? :specification_version then
