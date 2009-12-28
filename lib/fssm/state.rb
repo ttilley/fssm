@@ -3,32 +3,55 @@ class FSSM::State
   def initialize(path)
     @path = path
     @cache = FSSM::Tree::Cache.new
+    @created = []
+    @modified = []
+    @deleted = []
   end
-
+  
   def refresh(base=nil, skip_callbacks=false)
     previous, current = recache(base || @path.to_pathname)
+    refresh_keys(previous, current)
 
-    unless skip_callbacks
-      deleted(previous, current)
-      created(previous, current)
-      modified(previous, current)
+    if @path.collect
+      @path.sleep(all_events) unless skip_callbacks
+    else
+      unless skip_callbacks    
+        created(previous, current)
+        modified(previous, current)
+        deleted(previous, current)
+      end
     end
   end
 
   private
 
-  def created(previous, current)
-    (current.keys - previous.keys).each {|created| @path.create(created)}
+  def refresh_keys(previous, current)
+    @created = current.keys - previous.keys
+    @modified.clear
+    (current.keys & previous.keys).each do |file|
+      @modified.push(file) if (current[file] <=> previous[file]) != 0
+    end
+    @deleted = previous.keys - current.keys
   end
 
-  def deleted(previous, current)
-    (previous.keys - current.keys).each {|deleted| @path.delete(deleted)}
+  def all_events
+    {
+      :created => @created,
+      :modified => @modified,
+      :deleted => @deleted
+    }
+  end
+
+  def created(previous, current)
+    @created.each {|created| @path.create(created)}
   end
 
   def modified(previous, current)
-    (current.keys & previous.keys).each do |file|
-      @path.update(file) if (current[file] <=> previous[file]) != 0
-    end
+    @modified.each { |modified| @path.update(modified) }
+  end
+
+  def deleted(previous, current)
+    @deleted.each {|deleted| @path.delete(deleted)}
   end
 
   def recache(base)

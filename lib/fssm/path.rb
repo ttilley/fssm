@@ -1,7 +1,9 @@
 class FSSM::Path
-  def initialize(path=nil, glob=nil, &block)
+  attr_reader :collect
+  def initialize(path=nil, glob=nil, collect=false, &block)
     set_path(path || '.')
     set_glob(glob || '**/*')
+    @collect = collect
     init_callbacks
 
     if block_given?
@@ -36,6 +38,12 @@ class FSSM::Path
 
   def delete(callback_or_path=nil, &block)
     callback_action(:delete, (block_given? ? block : callback_or_path))
+  end
+
+  def sleep(all_events=nil, &block)
+    @callbacks[:sleep] = block if block.is_a?(Proc)
+    # avoid returning nil when skip_callbacks
+    @callbacks[:sleep].call(all_events) unless all_events == nil
   end
 
   private
