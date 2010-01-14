@@ -48,5 +48,14 @@ module FSSM::Support
       end
     end
 
+    def use_block(context, block)
+      return if block.nil?
+      if block.arity == 1
+        block.call(context)
+      else
+        context.instance_eval(&block)
+      end
+    end
+
   end
 end
