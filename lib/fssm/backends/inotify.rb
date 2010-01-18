@@ -4,7 +4,7 @@ module FSSM::Backends
       @notifier = INotify::Notifier.new
     end
 
-    def add_handler(path, preload=true)
+    def add_handler(handler, preload=true)
       @notifier.watch(handler.path.to_s, :all_events) do |event|
         handler.refresh(event.name)
       end
