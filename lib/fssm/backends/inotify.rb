@@ -7,7 +7,9 @@ module FSSM::Backends
     def add_handler(handler, preload=true)
       @notifier.watch(handler.path.to_s, :attrib, :modify, :create,
         :delete, :delete_self, :moved_from, :moved_to, :move_self) do |event|
-        handler.refresh(FSSM::Pathname.for(event.absolute_name))
+        path = FSSM::Pathname.for(event.absolute_name)
+        path = path.dirname unless event.name == "" # Event on root directory
+        handler.refresh(path)
       end
 
       handler.refresh(nil, true) if preload
