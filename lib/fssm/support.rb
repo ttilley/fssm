@@ -39,7 +39,7 @@ module FSSM::Support
     def rb_inotify?
       found = begin
         require 'rb-inotify'
-        INotify::Notifier.ancestors.include?(IO)
+        !INotify::Notifier.ancestors.include?(IO)
       rescue LoadError
         false
       end
