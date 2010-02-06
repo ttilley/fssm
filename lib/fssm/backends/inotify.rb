@@ -6,7 +6,7 @@ module FSSM::Backends
 
     def add_handler(handler, preload=true)
       @notifier.watch(handler.path.to_s, :all_events) do |event|
-        handler.refresh(event.name)
+        handler.refresh(FSSM::Pathname.for(event.name))
       end
 
       handler.refresh(nil, true) if preload
