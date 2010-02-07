@@ -41,7 +41,7 @@ module FSSM::Support
         require 'rb-inotify'
         if defined?(INotify::VERSION)
           version = INotify::VERSION
-          version[0] > 0 || version[1] > 5 || version[2] >= 1
+          version[0] > 0 || version[1] >= 6
         end
       rescue LoadError
         false
