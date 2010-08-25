@@ -11,7 +11,8 @@ module FSSM
     end
 
     def monitor(*args, &block)
-      monitor = FSSM::Monitor.new
+      options = args[-1].is_a?(Hash) ? args.pop : {}
+      monitor = FSSM::Monitor.new(options)
       FSSM::Support.use_block(args.empty? ? monitor : monitor.path(*args), block)
 
       monitor.run

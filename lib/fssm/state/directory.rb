@@ -2,8 +2,9 @@ module FSSM::State
   class Directory
     attr_reader :path
 
-    def initialize(path)
+    def initialize(path, options={})
       @path = path
+      @options = options
       @cache = FSSM::Tree::Cache.new
     end
 
@@ -35,9 +36,9 @@ module FSSM::State
 
     def recache(base)
       base = FSSM::Pathname.for(base)
-      previous = @cache.files
+      previous = cache_entries
       snapshot(base)
-      current = @cache.files
+      current = cache_entries
       [previous, current]
     end
 
@@ -53,5 +54,10 @@ module FSSM::State
       end
     end
 
+    def cache_entries
+      entries = @cache.files
+      entries.merge! @cache.directories if @options[:directories]
+      entries
+    end
   end
 end

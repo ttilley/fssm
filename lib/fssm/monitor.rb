@@ -8,7 +8,7 @@ class FSSM::Monitor
     path = FSSM::Path.new(*args)
     FSSM::Support.use_block(path, block)
 
-    @backend.add_handler(FSSM::State::Directory.new(path))
+    @backend.add_handler(FSSM::State::Directory.new(path, @options))
     path
   end
 
