@@ -21,11 +21,13 @@ module FSSM::State
     private
 
     def created(previous, current)
-      (current.keys - previous.keys).each {|created| @path.create(created)}
+      (current.keys - previous.keys).sort.each {|created| @path.create(created)}
     end
 
     def deleted(previous, current)
-      (previous.keys - current.keys).each {|deleted| @path.delete(deleted)}
+      (previous.keys - current.keys) \
+        .sort {|a, b| b <=> a} \
+        .each {|deleted| @path.delete(deleted)}
     end
 
     def modified(previous, current)

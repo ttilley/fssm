@@ -148,6 +148,42 @@ describe "The File System State Monitor" do
         @handler_results[:delete].should == [[@tmp_dir, 'root/file.rb']]
         @handler_results[:update].should == [[@tmp_dir, 'root']]
       end
+
+      it "should call delete callbacks upon directory structure deletion, in reverse order" do
+        FileUtils.rm_rf @tmp_dir + '/.'
+        run_monitor
+        @handler_results[:create].should == []
+        @handler_results[:delete].should == %w{
+            root/yawn
+            root/moo/cow.txt
+            root/moo
+            root/file.yml
+            root/file.rb
+            root/file.css
+            root/duck/quack.txt
+            root/duck
+            root
+          }.map {|rel| [@tmp_dir, rel]}
+        @handler_results[:update].should == []
+      end
+
+      it "should call create callbacks upon directory structure creation, in order" do
+        FileUtils.cp_r @tmp_dir + '/root/.', @tmp_dir + '/new_root'
+        run_monitor
+        @handler_results[:create].should == %w{
+            new_root
+            new_root/duck
+            new_root/duck/quack.txt
+            new_root/file.css
+            new_root/file.rb
+            new_root/file.yml
+            new_root/moo
+            new_root/moo/cow.txt
+            new_root/yawn
+          }.map {|rel| [@tmp_dir, rel]}
+        @handler_results[:delete].should == []
+        @handler_results[:update].should == []
+      end
     end
   end
 end
