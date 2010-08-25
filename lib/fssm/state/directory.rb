@@ -21,18 +21,21 @@ module FSSM::State
     private
 
     def created(previous, current)
-      (current.keys - previous.keys).sort.each {|created| @path.create(created)}
+      (current.keys - previous.keys).sort.each do |file|
+        @path.create(file, current[file][1])
+      end
     end
 
     def deleted(previous, current)
       (previous.keys - current.keys) \
         .sort {|a, b| b <=> a} \
-        .each {|deleted| @path.delete(deleted)}
+        .each {|file| @path.delete(file, previous[file][1])}
     end
 
     def modified(previous, current)
       (current.keys & previous.keys).each do |file|
-        @path.update(file) if (current[file] <=> previous[file]) != 0
+        current_data = current[file]
+        @path.update(file, current_data[1]) if (current_data[0] <=> previous[file][0]) != 0
       end
     end
 
@@ -57,9 +60,13 @@ module FSSM::State
     end
 
     def cache_entries
-      entries = @cache.files
-      entries.merge! @cache.directories if @options[:directories]
+      entries = tag_entries(@cache.files, :file)
+      entries.merge! tag_entries(@cache.directories, :directory) if @options[:directories]
       entries
+    end
+
+    def tag_entries(entries, tag)
+      Hash[entries.each_pair.map {|fname, mtime| [fname, [mtime, tag]]}]
     end
   end
 end

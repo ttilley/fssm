@@ -4,23 +4,27 @@ class FSSM::Monitor
     @backend = FSSM::Backends::Default.new
   end
 
-  def path(*args, &block)
-    path = FSSM::Path.new(*args)
-    FSSM::Support.use_block(path, block)
-
+  def path(path=nil, glob=nil, &block)
+    path = create_path(path, glob, &block)
     @backend.add_handler(FSSM::State::Directory.new(path, @options))
     path
   end
 
-  def file(*args, &block)
-    path = FSSM::Path.new(*args)
-    FSSM::Support.use_block(path, block)
-
+  def file(path=nil, glob=nil, &block)
+    path = create_path(path, glob, &block)
     @backend.add_handler(FSSM::State::File.new(path))
     path
   end
 
   def run
     @backend.run
+  end
+
+  private
+
+  def create_path(path, glob, &block)
+    path = FSSM::Path.new(path, glob, @options)
+    FSSM::Support.use_block(path, block)
+    path
   end
 end

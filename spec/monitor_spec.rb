@@ -17,7 +17,7 @@ module FSSM::MonitorSpecHelpers
   end
 
   def create_handler(type)
-    lambda {|base, relative| @handler_results[type] << [base, relative]}
+    lambda {|*args| @handler_results[type] << args}
   end
 
   def create_monitor(options={})
@@ -108,79 +108,79 @@ describe "The File System State Monitor" do
       it "should call create callback upon directory creation" do
         FileUtils.mkdir @tmp_dir + "/another_yawn"
         run_monitor
-        @handler_results[:create].should == [[@tmp_dir, 'another_yawn']]
+        @handler_results[:create].should == [[@tmp_dir, 'another_yawn', :directory]]
       end
 
       it "should call delete callback upon directory deletion" do
         FileUtils.rmdir @tmp_dir + "/root/yawn"
         run_monitor
-        @handler_results[:delete].should == [[@tmp_dir, 'root/yawn']]
+        @handler_results[:delete].should == [[@tmp_dir, 'root/yawn', :directory]]
       end
 
       it "should call create, update, and delete callbacks upon directory renaming in the same directory" do
         FileUtils.mv @tmp_dir + "/root/yawn", @tmp_dir + "/root/old_yawn"
         run_monitor
-        @handler_results[:create].should == [[@tmp_dir, 'root/old_yawn']]
-        @handler_results[:delete].should == [[@tmp_dir, 'root/yawn']]
-        @handler_results[:update].should == [[@tmp_dir, 'root']]
+        @handler_results[:create].should == [[@tmp_dir, 'root/old_yawn',  :directory]]
+        @handler_results[:delete].should == [[@tmp_dir, 'root/yawn',      :directory]]
+        @handler_results[:update].should == [[@tmp_dir, 'root',           :directory]]
       end
 
       it "should call create, update, and delete callbacks upon directory moving to another directory" do
         FileUtils.mv @tmp_dir + "/root/yawn", @tmp_dir + "/old_yawn"
         run_monitor
-        @handler_results[:create].should == [[@tmp_dir, 'old_yawn']]
-        @handler_results[:delete].should == [[@tmp_dir, 'root/yawn']]
-        @handler_results[:update].should == [[@tmp_dir, 'root']]
+        @handler_results[:create].should == [[@tmp_dir, 'old_yawn',   :directory]]
+        @handler_results[:delete].should == [[@tmp_dir, 'root/yawn',  :directory]]
+        @handler_results[:update].should == [[@tmp_dir, 'root',       :directory]]
       end
 
       it "should call create, update, and delete callbacks upon file renaming in the same directory" do
         FileUtils.mv @tmp_dir + "/root/file.rb", @tmp_dir + "/root/old_file.rb"
         run_monitor
-        @handler_results[:create].should == [[@tmp_dir, 'root/old_file.rb']]
-        @handler_results[:delete].should == [[@tmp_dir, 'root/file.rb']]
-        @handler_results[:update].should == [[@tmp_dir, 'root']]
+        @handler_results[:create].should == [[@tmp_dir, 'root/old_file.rb', :file]]
+        @handler_results[:delete].should == [[@tmp_dir, 'root/file.rb',     :file]]
+        @handler_results[:update].should == [[@tmp_dir, 'root',             :directory]]
       end
 
       it "should call create, update, and delete callbacks upon file moving to another directory" do
         FileUtils.mv @tmp_dir + "/root/file.rb", @tmp_dir + "/old_file.rb"
         run_monitor
-        @handler_results[:create].should == [[@tmp_dir, 'old_file.rb']]
-        @handler_results[:delete].should == [[@tmp_dir, 'root/file.rb']]
-        @handler_results[:update].should == [[@tmp_dir, 'root']]
+        @handler_results[:create].should == [[@tmp_dir, 'old_file.rb',  :file]]
+        @handler_results[:delete].should == [[@tmp_dir, 'root/file.rb', :file]]
+        @handler_results[:update].should == [[@tmp_dir, 'root',         :directory]]
       end
 
       it "should call delete callbacks upon directory structure deletion, in reverse order" do
         FileUtils.rm_rf @tmp_dir + '/.'
         run_monitor
         @handler_results[:create].should == []
-        @handler_results[:delete].should == %w{
-            root/yawn
-            root/moo/cow.txt
-            root/moo
-            root/file.yml
-            root/file.rb
-            root/file.css
-            root/duck/quack.txt
-            root/duck
-            root
-          }.map {|rel| [@tmp_dir, rel]}
+        @handler_results[:delete].should == [
+            ['root/yawn',           :directory],
+            ['root/moo/cow.txt',    :file],
+            ['root/moo',            :directory],
+            ['root/file.yml',       :file],
+            ['root/file.rb',        :file],
+            ['root/file.css',       :file],
+            ['root/duck/quack.txt', :file],
+            ['root/duck',           :directory],
+            ['root',                :directory]
+          ].map {|(file, type)| [@tmp_dir, file, type]}
         @handler_results[:update].should == []
       end
 
       it "should call create callbacks upon directory structure creation, in order" do
         FileUtils.cp_r @tmp_dir + '/root/.', @tmp_dir + '/new_root'
         run_monitor
-        @handler_results[:create].should == %w{
-            new_root
-            new_root/duck
-            new_root/duck/quack.txt
-            new_root/file.css
-            new_root/file.rb
-            new_root/file.yml
-            new_root/moo
-            new_root/moo/cow.txt
-            new_root/yawn
-          }.map {|rel| [@tmp_dir, rel]}
+        @handler_results[:create].should == [
+            ['new_root',                :directory],
+            ['new_root/duck',           :directory],
+            ['new_root/duck/quack.txt', :file],
+            ['new_root/file.css',       :file],
+            ['new_root/file.rb',        :file],
+            ['new_root/file.yml',       :file],
+            ['new_root/moo',            :directory],
+            ['new_root/moo/cow.txt',    :file],
+            ['new_root/yawn',           :directory]
+          ].map {|(file, type)| [@tmp_dir, file, type]}
         @handler_results[:delete].should == []
         @handler_results[:update].should == []
       end
