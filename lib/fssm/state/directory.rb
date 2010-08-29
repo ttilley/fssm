@@ -28,7 +28,8 @@ module FSSM::State
 
     def deleted(previous, current)
       (previous.keys - current.keys).
-        sort {|a, b| b <=> a}.
+        sort.
+        reverse.
         each {|file| @path.delete(file, previous[file][1])}
     end
 
