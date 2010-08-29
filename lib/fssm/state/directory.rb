@@ -67,7 +67,9 @@ module FSSM::State
     end
 
     def tag_entries(entries, tag)
-      Hash[entries.each_pair.map {|fname, mtime| [fname, [mtime, tag]]}]
+      tagged_entries = {}
+      entries.each_pair { |fname, mtime| tagged_entries[fname] = [mtime, tag] }
+      tagged_entries
     end
   end
 end
