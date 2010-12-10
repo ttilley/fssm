@@ -77,12 +77,12 @@ class FSSM::Path
   end
 
   def split_path(path)
-    path = FSSM::Pathname.for(path)
-    [@path, (path.relative? ? path : path.relative_path_from(@path))]
+    path = FSSM::Pathname.new(path)
+    [@path.to_s, (path.relative? ? path : path.relative_path_from(@path)).to_s]
   end
 
   def set_path(path)
-    path = FSSM::Pathname.for(path)
+    path = FSSM::Pathname.new(path)
     raise FSSM::FileNotFoundError, "No such file or directory - #{path}" unless path.exist?
     @path = path.expand_path
   end

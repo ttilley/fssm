@@ -40,7 +40,7 @@ module FSSM::State
     end
 
     def recache(base)
-      base = FSSM::Pathname.for(base)
+      base = FSSM::Pathname.new(base)
       previous = cache_entries
       snapshot(base)
       current = cache_entries
@@ -48,7 +48,7 @@ module FSSM::State
     end
 
     def snapshot(base)
-      base = FSSM::Pathname.for(base)
+      base = FSSM::Pathname.new(base)
       @cache.unset(base)
       @path.glob.each {|glob| add_glob(base, glob)}
     end
