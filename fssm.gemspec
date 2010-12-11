@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{fssm}
-  s.version = "0.2.0"
+  s.version = "0.2.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Travis Tilley"]
-  s.date = %q{2010-11-13}
+  s.date = %q{2010-12-10}
   s.description = %q{file system state monitor}
   s.email = %q{ttilley@gmail.com}
   s.extra_rdoc_files = [
@@ -38,6 +38,7 @@ Gem::Specification.new do |s|
     "lib/fssm/tree.rb",
     "profile/prof-cache.rb",
     "profile/prof-fssm-pathname.html",
+    "profile/prof-pathname-rubinius.rb",
     "profile/prof-pathname.rb",
     "profile/prof-plain-pathname.html",
     "profile/prof.html",
@@ -52,7 +53,7 @@ Gem::Specification.new do |s|
   ]
   s.homepage = %q{http://github.com/ttilley/fssm}
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.6}
+  s.rubygems_version = %q{1.3.7}
   s.summary = %q{file system state monitor}
   s.test_files = [
     "spec/monitor_spec.rb",
@@ -65,7 +66,7 @@ Gem::Specification.new do |s|
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
     s.specification_version = 3
 
-    if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
+    if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_development_dependency(%q<rspec>, [">= 0"])
     else
       s.add_dependency(%q<rspec>, [">= 0"])
