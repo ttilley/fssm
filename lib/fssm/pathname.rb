@@ -11,13 +11,13 @@ module FSSM
 
     class << self
       def for(path)
-        path.is_a?(::FSSM::Pathname) ? path : new("#{path}")
+        path.is_a?(::FSSM::Pathname) ? path : new(path.to_s)
       end
     end
 
     def initialize(path)
-      raise ArgumentError, "path cannot contain ASCII NULLs" if path =~ %r{\0}
-      super(path)
+      raise ArgumentError, "path cannot contain ASCII NULLs" if path.to_s =~ %r{\0}
+      super(path.to_s)
     end
 
     def <=>(other)
@@ -183,16 +183,17 @@ module FSSM
     end
 
     def to_s
-      "#{self}"
+      # this is required to work in rubinius
+      String.allocate.replace(self)
     end
 
     alias to_str to_s
 
     def unlink
-      Dir.unlink(self)
+      Dir.unlink(self.to_s)
       true
     rescue Errno::ENOTDIR
-      File.unlink(self)
+      File.unlink(self.to_s)
       true
     end
   end
@@ -207,19 +208,19 @@ module FSSM
     end
 
     def entries
-      Dir.entries(self).map! {|e| FSSM::Pathname.new(e) }
+      Dir.entries(self.to_s).map! {|e| FSSM::Pathname.new(e) }
     end
 
     def mkdir(mode = 0777)
-      Dir.mkdir(self, mode)
+      Dir.mkdir(self.to_s, mode)
     end
 
     def opendir(&blk)
-      Dir.open(self, &blk)
+      Dir.open(self.to_s, &blk)
     end
 
     def rmdir
-      Dir.rmdir(self)
+      Dir.rmdir(self.to_s)
     end
 
     def self.glob(pattern, flags = 0)
@@ -242,127 +243,127 @@ module FSSM
 
     def chdir
       blk = lambda { yield self } if block_given?
-      Dir.chdir(self, &blk)
+      Dir.chdir(self.to_s, &blk)
     end
   end
 
   class Pathname
     def blockdev?
-      FileTest.blockdev?(self)
+      FileTest.blockdev?(self.to_s)
     end
 
     def chardev?
-      FileTest.chardev?(self)
+      FileTest.chardev?(self.to_s)
     end
 
     def directory?
-      FileTest.directory?(self)
+      FileTest.directory?(self.to_s)
     end
 
     def executable?
-      FileTest.executable?(self)
+      FileTest.executable?(self.to_s)
     end
 
     def executable_real?
-      FileTest.executable_real?(self)
+      FileTest.executable_real?(self.to_s)
     end
 
     def exists?
-      FileTest.exists?(self)
+      FileTest.exists?(self.to_s)
     end
 
     def file?
-      FileTest.file?(self)
+      FileTest.file?(self.to_s)
     end
 
     def grpowned?
-      FileTest.grpowned?(self)
+      FileTest.grpowned?(self.to_s)
     end
 
     def owned?
-      FileTest.owned?(self)
+      FileTest.owned?(self.to_s)
     end
 
     def pipe?
-      FileTest.pipe?(self)
+      FileTest.pipe?(self.to_s)
     end
 
     def readable?
-      FileTest.readable?(self)
+      FileTest.readable?(self.to_s)
     end
 
     def readable_real?
-      FileTest.readable_real?(self)
+      FileTest.readable_real?(self.to_s)
     end
 
     def setgid?
-      FileTest.setgit?(self)
+      FileTest.setgit?(self.to_s)
     end
 
     def setuid?
-      FileTest.setuid?(self)
+      FileTest.setuid?(self.to_s)
     end
 
     def socket?
-      FileTest.socket?(self)
+      FileTest.socket?(self.to_s)
     end
 
     def sticky?
-      FileTest.sticky?(self)
+      FileTest.sticky?(self.to_s)
     end
 
     def symlink?
-      FileTest.symlink?(self)
+      FileTest.symlink?(self.to_s)
     end
 
     def world_readable?
-      FileTest.world_readable?(self)
+      FileTest.world_readable?(self.to_s)
     end
 
     def world_writable?
-      FileTest.world_writable?(self)
+      FileTest.world_writable?(self.to_s)
     end
 
     def writable?
-      FileTest.writable?(self)
+      FileTest.writable?(self.to_s)
     end
 
     def writable_real?
-      FileTest.writable_real?(self)
+      FileTest.writable_real?(self.to_s)
     end
 
     def zero?
-      FileTest.zero?(self)
+      FileTest.zero?(self.to_s)
     end
   end
 
   class Pathname
     def atime
-      File.atime(self)
+      File.atime(self.to_s)
     end
 
     def ctime
-      File.ctime(self)
+      File.ctime(self.to_s)
     end
 
     def ftype
-      File.ftype(self)
+      File.ftype(self.to_s)
     end
 
     def lstat
-      File.lstat(self)
+      File.lstat(self.to_s)
     end
 
     def mtime
-      File.mtime(self)
+      File.mtime(self.to_s)
     end
 
     def stat
-      File.stat(self)
+      File.stat(self.to_s)
     end
 
     def utime(atime, mtime)
-      File.utime(self, atime, mtime)
+      File.utime(self.to_s, atime, mtime)
     end
   end
 
@@ -374,118 +375,118 @@ module FSSM
     end
 
     def basename
-      self.class.new(File.basename(self))
+      self.class.new(File.basename(self.to_s))
     end
 
     def chmod(mode)
-      File.chmod(mode, self)
+      File.chmod(mode, self.to_s)
     end
 
     def chown(owner, group)
-      File.chown(owner, group, self)
+      File.chown(owner, group, self.to_s)
     end
 
     def dirname
-      self.class.new(File.dirname(self))
+      self.class.new(File.dirname(self.to_s))
     end
 
     def expand_path(from = nil)
-      self.class.new(File.expand_path(self, from))
+      self.class.new(File.expand_path(self.to_s, from))
     end
 
     def extname
-      File.extname(self)
+      File.extname(self.to_s)
     end
 
     def fnmatch?(pat, flags = 0)
-      File.fnmatch(pat, self, flags)
+      File.fnmatch(pat, self.to_s, flags)
     end
 
     def join(*parts)
-      self.class.join(self, *parts)
+      self.class.join(self.to_s, *parts)
     end
 
     def lchmod(mode)
-      File.lchmod(mode, self)
+      File.lchmod(mode, self.to_s)
     end
 
     def lchown(owner, group)
-      File.lchown(owner, group, self)
+      File.lchown(owner, group, self.to_s)
     end
 
     def link(to)
-      File.link(self, to)
+      File.link(self.to_s, to)
     end
 
     def open(mode = 'r', perm = nil, &blk)
-      File.open(self, mode, perm, &blk)
+      File.open(self.to_s, mode, perm, &blk)
     end
 
     def readlink
-      self.class.new(File.readlink(self))
+      self.class.new(File.readlink(self.to_s))
     end
 
     def rename(to)
-      File.rename(self, to)
+      File.rename(self.to_s, to)
       replace(to)
     end
 
     def size
-      File.size(self)
+      File.size(self.to_s)
     end
 
     def size?
-      File.size?(self)
+      File.size?(self.to_s)
     end
 
     def split
-      File.split(self).map {|part| FSSM::Pathname.new(part) }
+      File.split(self.to_s).map {|part| FSSM::Pathname.new(part) }
     end
 
     def symlink(to)
-      File.symlink(self, to)
+      File.symlink(self.to_s, to)
     end
 
-    def truncate
-      File.truncate(self)
+    def truncate(size)
+      File.truncate(self.to_s, size)
     end
   end
 
   class Pathname
     def mkpath
-      self.class.new(FileUtils.mkpath(self))
+      self.class.new(FileUtils.mkpath(self.to_s))
     end
 
     def rmtree
-      self.class.new(FileUtils.rmtree(self).first)
+      self.class.new(FileUtils.rmtree(self.to_s).first)
     end
 
     def touch
-      self.class.new(FileUtils.touch(self).first)
+      self.class.new(FileUtils.touch(self.to_s).first)
     end
   end
 
   class Pathname
     def each_line(sep = $/, &blk)
-      IO.foreach(self, sep, &blk)
+      IO.foreach(self.to_s, sep, &blk)
     end
 
     def read(len = nil, off = 0)
-      IO.read(self, len, off)
+      IO.read(self.to_s, len, off)
     end
 
     def readlines(sep = $/)
-      IO.readlines(self, sep)
+      IO.readlines(self.to_s, sep)
     end
 
     def sysopen(mode = 'r', perm = nil)
-      IO.sysopen(self, mode, perm)
+      IO.sysopen(self.to_s, mode, perm)
     end
   end
 
   class Pathname
     def find
-      Find.find(self) {|path| yield FSSM::Pathname.new(path) }
+      Find.find(self.to_s) {|path| yield FSSM::Pathname.new(path) }
     end
   end
 
