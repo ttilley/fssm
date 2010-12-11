@@ -8,3 +8,5 @@ nbproject
 pkg
 rdoc
 
+# Rubinius compiled bytecode
+*.rbc

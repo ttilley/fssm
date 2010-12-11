@@ -78,7 +78,7 @@ class FSSM::Path
 
   def split_path(path)
     path = FSSM::Pathname.for(path)
-    [@path, (path.relative? ? path : path.relative_path_from(@path))]
+    [@path.to_s, (path.relative? ? path : path.relative_path_from(@path)).to_s]
   end
 
   def set_path(path)
