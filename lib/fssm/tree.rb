@@ -34,8 +34,8 @@ module FSSM::Tree
     def each(prefix=nil, &block)
       @children.each do |segment, node|
         cprefix = prefix ?
-                FSSM::Pathname.new(prefix).join(segment) :
-                FSSM::Pathname.new(segment)
+                FSSM::Pathname.for(prefix).join(segment) :
+                FSSM::Pathname.for(segment)
         block.call([cprefix, node])
         node.each(cprefix, &block)
       end
@@ -72,7 +72,7 @@ module FSSM::Tree
 
     def key_segments(key)
       return key if key.is_a?(Array)
-      FSSM::Pathname.new(key).to_a
+      FSSM::Pathname.for(key).segments
     end
 
     def descendant(path)
@@ -127,7 +127,7 @@ module FSSM::Tree
     end
 
     def from_path(path)
-      path = FSSM::Pathname.new(path)
+      path = FSSM::Pathname.for(path)
       @ftype = path.ftype
       # this handles bad symlinks without failing. why handle bad symlinks at
       # all? well, we could still be interested in their creation and deletion.
@@ -145,7 +145,7 @@ module FSSM::Tree
     def set(path)
       # all paths set from this level need to be absolute
       # realpath will fail on broken links
-      path = FSSM::Pathname.new(path).expand_path
+      path = FSSM::Pathname.for(path).expand_path
       super(path)
     end
 
