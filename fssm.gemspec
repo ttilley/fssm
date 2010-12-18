@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{fssm}
-  s.version = "0.2.2"
+  s.version = "0.2.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Travis Tilley"]
-  s.date = %q{2010-12-11}
+  s.date = %q{2010-12-18}
   s.description = %q{file system state monitor}
   s.email = %q{ttilley@gmail.com}
   s.extra_rdoc_files = [
@@ -42,6 +42,7 @@ Gem::Specification.new do |s|
     "profile/prof-pathname.rb",
     "profile/prof-plain-pathname.html",
     "profile/prof.html",
+    "spec/count_down_latch.rb",
     "spec/monitor_spec.rb",
     "spec/path_spec.rb",
     "spec/root/duck/quack.txt",
@@ -56,6 +57,7 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.3.7}
   s.summary = %q{file system state monitor}
   s.test_files = [
+    "spec/count_down_latch.rb",
     "spec/monitor_spec.rb",
     "spec/path_spec.rb",
     "spec/root/file.rb",
