@@ -3,6 +3,7 @@ $LOAD_PATH.unshift dir unless $LOAD_PATH.include?(dir)
 
 module FSSM
   FileNotFoundError = Class.new(StandardError)
+  FileNotRealError = Class.new(StandardError)
   CallbackError = Class.new(StandardError)
 
   class << self

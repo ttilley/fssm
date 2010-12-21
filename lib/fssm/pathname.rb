@@ -5,6 +5,7 @@ require 'pathname'
 module FSSM
   class Pathname < ::Pathname
     ROOT = '/'.freeze
+    VIRTUAL_REGEX = /^file:([^!]*)!/
 
     class << self
       def for(path)
@@ -12,6 +13,10 @@ module FSSM
       end
 
       alias :[] :glob
+    end
+    
+    def is_virtual?
+      !!(VIRTUAL_REGEX =~ to_s)
     end
 
     def segments
