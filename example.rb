@@ -1,5 +1,8 @@
 $:.unshift(File.join(File.dirname(__FILE__), 'lib'))
 
+# for rb-inotify/rb-fsevent
+require 'rubygems'
+
 require 'fssm'
 
 FSSM.monitor('.', '**/*') do
