@@ -4,12 +4,11 @@ require 'pathname'
 
 module FSSM
   class Pathname < ::Pathname
-    ROOT = '/'.freeze
     VIRTUAL_REGEX = /^file:([^!]*)!/
 
     class << self
       def for(path)
-        path.is_a?(Pathname) ? path : new(path)
+        path.is_a?(::FSSM::Pathname) ? path : new(path)
       end
 
       alias :[] :glob
@@ -23,7 +22,8 @@ module FSSM
       path = to_s
       array = path.split(File::SEPARATOR)
       array.delete('')
-      array.insert(0, ROOT) if path[0,1] == ROOT
+      array.insert(0, File::SEPARATOR) if path[0,1] == File::SEPARATOR
+      array[0] += File::SEPARATOR if path[0,3] =~ SEPARATOR_PAT
       array
     end
 
