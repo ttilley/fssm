@@ -14,7 +14,7 @@ module FSSM::MonitorSpecHelpers
   end
 
   def remove_tmp_dir
-    FileUtils.remove_entry_secure @tmp_dir
+    FileUtils.remove_entry @tmp_dir
   end
 
   def create_handler(type, latch)
