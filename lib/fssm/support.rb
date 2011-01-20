@@ -4,23 +4,23 @@ module FSSM::Support
   class << self
     def usable_backend
       choice = case
-        when mac? && !jruby? && carbon_core?
-          'FSEvents'
-        when mac? && rb_fsevent?
-          'RBFSEvent'
-        when linux? && rb_inotify?
-          'Inotify'
-        else
-          'Polling'
-        end
+                 when mac? && !jruby? && carbon_core?
+                   'FSEvents'
+                 when mac? && rb_fsevent?
+                   'RBFSEvent'
+                 when linux? && rb_inotify?
+                   'Inotify'
+                 else
+                   'Polling'
+               end
 
       if (mac? || linux?) && choice == 'Polling'
         optimal = case
-          when mac?
-            'rb-fsevent'
-          when linux?
-            'rb-inotify'
-          end
+                    when mac?
+                      'rb-fsevent'
+                    when linux?
+                      'rb-inotify'
+                  end
         STDERR.puts("FSSM: An optimized backend is available for this platform!")
         STDERR.puts("    gem install #{optimal}")
       end

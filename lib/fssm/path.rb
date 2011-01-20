@@ -42,7 +42,7 @@ class FSSM::Path
   private
 
   def init_callbacks
-    do_nothing = lambda {|base, relative|}
+    do_nothing = lambda { |base, relative|}
     @callbacks = Hash.new(do_nothing)
   end
 

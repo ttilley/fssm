@@ -3,9 +3,9 @@ module FSSM::State
     attr_reader :path
 
     def initialize(path, options={})
-      @path = path
+      @path    = path
       @options = options
-      @cache = FSSM::Tree::Cache.new
+      @cache   = FSSM::Tree::Cache.new
     end
 
     def refresh(base=nil, skip_callbacks=false)
@@ -40,7 +40,7 @@ module FSSM::State
     end
 
     def recache(base)
-      base = FSSM::Pathname.for(base)
+      base     = FSSM::Pathname.for(base)
       previous = cache_entries
       snapshot(base)
       current = cache_entries
@@ -50,7 +50,7 @@ module FSSM::State
     def snapshot(base)
       base = FSSM::Pathname.for(base)
       @cache.unset(base)
-      @path.glob.each {|glob| add_glob(base, glob)}
+      @path.glob.each { |glob| add_glob(base, glob) }
     end
 
     def add_glob(base, glob)
