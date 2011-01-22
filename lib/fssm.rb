@@ -23,6 +23,7 @@ end
 
 require 'thread'
 
+require 'fssm/version'
 require 'fssm/pathname'
 require 'fssm/support'
 require 'fssm/tree'

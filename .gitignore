@@ -1,12 +1,11 @@
+*.gem
 *.rbc
 *.sw?
 .DS_Store
+.bundle
 .idea
-/*.gem
+Gemfile.lock
 coverage
 nbproject
-pkg
+pkg/*
 rdoc
-
-# Rubinius compiled bytecode
-*.rbc
