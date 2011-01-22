@@ -6,7 +6,7 @@ require 'tempfile'
 
 module FSSM::MonitorSpecHelpers
   def create_tmp_dir
-    @tmp_dir = Dir.mktmpdir
+    @tmp_dir = FSSM::Pathname.for(Dir.mktmpdir).realpath.to_s
     FileUtils.cp_r File.join(File.dirname(__FILE__), 'root'), @tmp_dir
     # Because git does not track empty directories, create one ourselves.
     FileUtils.mkdir_p @tmp_dir + '/root/yawn'
@@ -112,50 +112,50 @@ describe "The File System State Monitor" do
         run_monitor(1, :directories => true) do
           FileUtils.mkdir @tmp_dir + "/another_yawn"
         end
-        @handler_results[:create].should == [[@tmp_dir, 'another_yawn', :directory]]
+        @handler_results[:create].should include([@tmp_dir, 'another_yawn', :directory])
       end
 
       it "should call delete callback upon directory deletion" do
         run_monitor(1, :directories => true) do
           FileUtils.rmdir @tmp_dir + "/root/yawn"
         end
-        @handler_results[:delete].should == [[@tmp_dir, 'root/yawn', :directory]]
+        @handler_results[:delete].should include([@tmp_dir, 'root/yawn', :directory])
       end
 
       it "should call create, update, and delete callbacks upon directory renaming in the same directory" do
         run_monitor(3, :directories => true) do
           FileUtils.mv @tmp_dir + "/root/yawn", @tmp_dir + "/root/old_yawn"
         end
-        @handler_results[:create].should == [[@tmp_dir, 'root/old_yawn',  :directory]]
-        @handler_results[:delete].should == [[@tmp_dir, 'root/yawn',      :directory]]
-        @handler_results[:update].should == [[@tmp_dir, 'root',           :directory]]
+        @handler_results[:create].should include([@tmp_dir, 'root/old_yawn',  :directory])
+        @handler_results[:delete].should include([@tmp_dir, 'root/yawn',      :directory])
+        @handler_results[:update].should include([@tmp_dir, 'root',           :directory])
       end
 
       it "should call create, update, and delete callbacks upon directory moving to another directory" do
         run_monitor(3, :directories => true) do
           FileUtils.mv @tmp_dir + "/root/yawn", @tmp_dir + "/old_yawn"
         end
-        @handler_results[:create].should == [[@tmp_dir, 'old_yawn',   :directory]]
-        @handler_results[:delete].should == [[@tmp_dir, 'root/yawn',  :directory]]
-        @handler_results[:update].should == [[@tmp_dir, 'root',       :directory]]
+        @handler_results[:create].should include([@tmp_dir, 'old_yawn',   :directory])
+        @handler_results[:delete].should include([@tmp_dir, 'root/yawn',  :directory])
+        @handler_results[:update].should include([@tmp_dir, 'root',       :directory])
       end
 
       it "should call create, update, and delete callbacks upon file renaming in the same directory" do
         run_monitor(3, :directories => true) do
           FileUtils.mv @tmp_dir + "/root/file.rb", @tmp_dir + "/root/old_file.rb"
         end
-        @handler_results[:create].should == [[@tmp_dir, 'root/old_file.rb', :file]]
-        @handler_results[:delete].should == [[@tmp_dir, 'root/file.rb',     :file]]
-        @handler_results[:update].should == [[@tmp_dir, 'root',             :directory]]
+        @handler_results[:create].should include([@tmp_dir, 'root/old_file.rb', :file])
+        @handler_results[:delete].should include([@tmp_dir, 'root/file.rb',     :file])
+        @handler_results[:update].should include([@tmp_dir, 'root',             :directory])
       end
 
       it "should call create, update, and delete callbacks upon file moving to another directory" do
         run_monitor(3, :directories => true) do
           FileUtils.mv @tmp_dir + "/root/file.rb", @tmp_dir + "/old_file.rb"
         end
-        @handler_results[:create].should == [[@tmp_dir, 'old_file.rb',  :file]]
-        @handler_results[:delete].should == [[@tmp_dir, 'root/file.rb', :file]]
-        @handler_results[:update].should == [[@tmp_dir, 'root',         :directory]]
+        @handler_results[:create].should include([@tmp_dir, 'old_file.rb',  :file])
+        @handler_results[:delete].should include([@tmp_dir, 'root/file.rb', :file])
+        @handler_results[:update].should include([@tmp_dir, 'root',         :directory])
       end
 
       it "should call delete callbacks upon directory structure deletion, in reverse order" do
