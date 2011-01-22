@@ -82,10 +82,9 @@ class FSSM::Path
   end
 
   def set_path(path)
-    path = FSSM::Pathname.for(path)
-    raise FSSM::FileNotFoundError, "No such file or directory - #{path}" unless path.exist?
-    raise FSSM::FileNotRealError, "Path is virtual - #{path}" if path.is_virtual?
-    @path = path.expand_path
+    @path = FSSM::Pathname.for(path).expand_path
+    raise FSSM::FileNotFoundError, "No such file or directory - #{@path}" unless @path.exist?
+    raise FSSM::FileNotRealError, "Path is virtual - #{@path}" if @path.is_virtual?
   end
 
   def set_glob(glob)
