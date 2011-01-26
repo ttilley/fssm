@@ -2,7 +2,7 @@ $:.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 
 require 'pathname'
 
-$test_path = "#{Pathname.new('..').expand_path}"
+$test_path  = "#{Pathname.new('..').expand_path}"
 $iterations = 900000
 
 if ARGV.first == 'native'
@@ -20,7 +20,7 @@ if ARGV.first == 'native'
   end
 
   $iterations.times do |num|
-    p = ::Pathname.new($test_path)
+    p        = ::Pathname.new($test_path)
     segments = p.segments
   end
 else
@@ -29,7 +29,7 @@ else
   require 'fssm'
 
   $iterations.times do |num|
-    p = FSSM::Pathname.new($test_path)
+    p        = FSSM::Pathname.new($test_path)
     segments = p.segments
   end
 end

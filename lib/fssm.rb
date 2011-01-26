@@ -1,6 +1,7 @@
 dir = File.dirname(__FILE__)
 $LOAD_PATH.unshift dir unless $LOAD_PATH.include?(dir)
 
+#noinspection ALL
 module FSSM
   FileNotFoundError = Class.new(StandardError)
   FileNotRealError  = Class.new(StandardError)
@@ -8,7 +9,7 @@ module FSSM
 
   class << self
     def dbg(msg=nil)
-      STDERR.puts(msg)
+      STDERR.puts("FSSM -> #{msg}")
     end
 
     def monitor(*args, &block)

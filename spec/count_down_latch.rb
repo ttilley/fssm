@@ -9,7 +9,7 @@ class CountDownLatch
   def initialize(to)
     @count = to.to_i
     raise ArgumentError, "cannot count down from negative integer" unless @count >= 0
-    @lock = Mutex.new
+    @lock      = Mutex.new
     @condition = ConditionVariable.new
   end
 
@@ -37,7 +37,7 @@ if $0 == __FILE__
 
     def test_basic_latch_usage
       latch = CountDownLatch.new(1)
-      name = "foo"
+      name  = "foo"
       Thread.new do
         name = "bar"
         latch.count_down
@@ -49,7 +49,7 @@ if $0 == __FILE__
 
     def test_basic_latch_usage_inverted
       latch = CountDownLatch.new(1)
-      name = "foo"
+      name  = "foo"
       Thread.new do
         latch.wait
         assert_equal(0, latch.count)
@@ -67,7 +67,7 @@ if $0 == __FILE__
 
     def test_count_down_twice_with_thread
       latch = CountDownLatch.new(2)
-      name = "foo"
+      name  = "foo"
       Thread.new do
         latch.count_down
         name = "bar"
@@ -80,7 +80,7 @@ if $0 == __FILE__
 
     def test_count_down_twice_with_two_parallel_threads
       latch = CountDownLatch.new(2)
-      name = "foo"
+      name  = "foo"
       Thread.new { latch.count_down }
       Thread.new do
         name = "bar"
@@ -93,7 +93,7 @@ if $0 == __FILE__
 
     def test_count_down_twice_with_two_chained_threads
       latch = CountDownLatch.new(2)
-      name = "foo"
+      name  = "foo"
       Thread.new do
         latch.count_down
         Thread.new do
@@ -108,8 +108,8 @@ if $0 == __FILE__
 
     def test_count_down_with_multiple_waiters
       proceed_latch = CountDownLatch.new(2)
-      check_latch = CountDownLatch.new(2)
-      results = {}
+      check_latch   = CountDownLatch.new(2)
+      results       = {}
       Thread.new do
         proceed_latch.wait
         results[:first] = 1
@@ -131,9 +131,9 @@ if $0 == __FILE__
 
     def test_interleaved_latches
       change_1_latch = CountDownLatch.new(1)
-      check_latch = CountDownLatch.new(1)
+      check_latch    = CountDownLatch.new(1)
       change_2_latch = CountDownLatch.new(1)
-      name = "foo"
+      name           = "foo"
       Thread.new do
         name = "bar"
         change_1_latch.count_down

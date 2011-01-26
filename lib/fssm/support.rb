@@ -21,8 +21,8 @@ module FSSM::Support
                     when linux?
                       'rb-inotify'
                   end
-        STDERR.puts("FSSM: An optimized backend is available for this platform!")
-        STDERR.puts("    gem install #{optimal}")
+        FSSM.dbg("An optimized backend is available for this platform!")
+        FSSM.dbg("    gem install #{optimal}")
       end
 
       choice

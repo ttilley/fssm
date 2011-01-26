@@ -25,9 +25,9 @@ module FSSM::MonitorSpecHelpers
   end
 
   def run_monitor(num_events_to_expect=0, options={})
-    event_latch = CountDownLatch.new(num_events_to_expect)
-    @handler_results = Hash.new {|hash, key| hash[key] = []}
-    thread = Thread.new do
+    event_latch      = CountDownLatch.new(num_events_to_expect)
+    @handler_results = Hash.new { |hash, key| hash[key] = [] }
+    thread           = Thread.new do
       monitor = FSSM::Monitor.new(options)
       monitor.path(@tmp_dir) do |p|
         p.create(&create_handler(:create, event_latch))
@@ -36,7 +36,7 @@ module FSSM::MonitorSpecHelpers
       end
       monitor.run
     end
-    sleep 1   # give time for monitor to start up
+    sleep 1 # give time for monitor to start up
     yield if block_given?
     event_latch.wait
     thread.kill
@@ -126,18 +126,18 @@ describe "The File System State Monitor" do
         run_monitor(3, :directories => true) do
           FileUtils.mv @tmp_dir + "/root/yawn", @tmp_dir + "/root/old_yawn"
         end
-        @handler_results[:create].should include([@tmp_dir, 'root/old_yawn',  :directory])
-        @handler_results[:delete].should include([@tmp_dir, 'root/yawn',      :directory])
-        @handler_results[:update].should include([@tmp_dir, 'root',           :directory])
+        @handler_results[:create].should include([@tmp_dir, 'root/old_yawn', :directory])
+        @handler_results[:delete].should include([@tmp_dir, 'root/yawn', :directory])
+        @handler_results[:update].should include([@tmp_dir, 'root', :directory])
       end
 
       it "should call create, update, and delete callbacks upon directory moving to another directory" do
         run_monitor(3, :directories => true) do
           FileUtils.mv @tmp_dir + "/root/yawn", @tmp_dir + "/old_yawn"
         end
-        @handler_results[:create].should include([@tmp_dir, 'old_yawn',   :directory])
-        @handler_results[:delete].should include([@tmp_dir, 'root/yawn',  :directory])
-        @handler_results[:update].should include([@tmp_dir, 'root',       :directory])
+        @handler_results[:create].should include([@tmp_dir, 'old_yawn', :directory])
+        @handler_results[:delete].should include([@tmp_dir, 'root/yawn', :directory])
+        @handler_results[:update].should include([@tmp_dir, 'root', :directory])
       end
 
       it "should call create, update, and delete callbacks upon file renaming in the same directory" do
@@ -145,55 +145,55 @@ describe "The File System State Monitor" do
           FileUtils.mv @tmp_dir + "/root/file.rb", @tmp_dir + "/root/old_file.rb"
         end
         @handler_results[:create].should include([@tmp_dir, 'root/old_file.rb', :file])
-        @handler_results[:delete].should include([@tmp_dir, 'root/file.rb',     :file])
-        @handler_results[:update].should include([@tmp_dir, 'root',             :directory])
+        @handler_results[:delete].should include([@tmp_dir, 'root/file.rb', :file])
+        @handler_results[:update].should include([@tmp_dir, 'root', :directory])
       end
 
       it "should call create, update, and delete callbacks upon file moving to another directory" do
         run_monitor(3, :directories => true) do
           FileUtils.mv @tmp_dir + "/root/file.rb", @tmp_dir + "/old_file.rb"
         end
-        @handler_results[:create].should include([@tmp_dir, 'old_file.rb',  :file])
+        @handler_results[:create].should include([@tmp_dir, 'old_file.rb', :file])
         @handler_results[:delete].should include([@tmp_dir, 'root/file.rb', :file])
-        @handler_results[:update].should include([@tmp_dir, 'root',         :directory])
+        @handler_results[:update].should include([@tmp_dir, 'root', :directory])
       end
 
       it "should call delete callbacks upon directory structure deletion, in reverse order" do
         expected_delete_events = [
-          ['root/yawn',           :directory],
-          ['root/moo/cow.txt',    :file],
-          ['root/moo',            :directory],
-          ['root/file.yml',       :file],
-          ['root/file.rb',        :file],
-          ['root/file.css',       :file],
-          ['root/duck/quack.txt', :file],
-          ['root/duck',           :directory],
-          ['root',                :directory]
+            ['root/yawn', :directory],
+            ['root/moo/cow.txt', :file],
+            ['root/moo', :directory],
+            ['root/file.yml', :file],
+            ['root/file.rb', :file],
+            ['root/file.css', :file],
+            ['root/duck/quack.txt', :file],
+            ['root/duck', :directory],
+            ['root', :directory]
         ]
         run_monitor(expected_delete_events.size, :directories => true) do
           FileUtils.rm_rf @tmp_dir + '/.'
         end
         @handler_results[:create].should == []
-        @handler_results[:delete].should == expected_delete_events.map {|(file, type)| [@tmp_dir, file, type]}
+        @handler_results[:delete].should == expected_delete_events.map { |(file, type)| [@tmp_dir, file, type] }
         @handler_results[:update].should == []
       end
 
       it "should call create callbacks upon directory structure creation, in order" do
         expected_create_events = [
-          ['new_root',                :directory],
-          ['new_root/duck',           :directory],
-          ['new_root/duck/quack.txt', :file],
-          ['new_root/file.css',       :file],
-          ['new_root/file.rb',        :file],
-          ['new_root/file.yml',       :file],
-          ['new_root/moo',            :directory],
-          ['new_root/moo/cow.txt',    :file],
-          ['new_root/yawn',           :directory]
+            ['new_root', :directory],
+            ['new_root/duck', :directory],
+            ['new_root/duck/quack.txt', :file],
+            ['new_root/file.css', :file],
+            ['new_root/file.rb', :file],
+            ['new_root/file.yml', :file],
+            ['new_root/moo', :directory],
+            ['new_root/moo/cow.txt', :file],
+            ['new_root/yawn', :directory]
         ]
         run_monitor(expected_create_events.size, :directories => true) do
           FileUtils.cp_r @tmp_dir + '/root/.', @tmp_dir + '/new_root'
         end
-        @handler_results[:create].should == expected_create_events.map {|(file, type)| [@tmp_dir, file, type]}
+        @handler_results[:create].should == expected_create_events.map { |(file, type)| [@tmp_dir, file, type] }
         @handler_results[:delete].should == []
         @handler_results[:update].should == []
       end
