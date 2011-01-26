@@ -8,12 +8,18 @@ class FSSM::Monitor
     path = create_path(path, glob, &block)
     @backend.add_handler(FSSM::State::Directory.new(path, @options))
     path
+  rescue FSSM::FileNotRealError => e
+    FSSM.dbg("#{e}")
+    nil
   end
 
   def file(path=nil, glob=nil, &block)
     path = create_path(path, glob, &block)
     @backend.add_handler(FSSM::State::File.new(path))
     path
+  rescue FSSM::FileNotRealError => e
+    FSSM.dbg("#{e}")
+    nil
   end
 
   def run
