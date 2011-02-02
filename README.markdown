@@ -1,3 +1,5 @@
+# FSSM ![project status](http://stillmaintained.com/ttilley/fssm.png) #
+
 Monitor API
 ===========
 
