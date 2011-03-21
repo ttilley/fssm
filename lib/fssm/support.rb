@@ -4,7 +4,7 @@ module FSSM::Support
   class << self
     def usable_backend
       choice = case
-                 when mac? && !jruby? && carbon_core?
+                 when mac? && !lion? && !jruby? && carbon_core?
                    'FSEvents'
                  when mac? && rb_fsevent?
                    'RBFSEvent'
@@ -40,6 +40,10 @@ module FSSM::Support
       Config::CONFIG['target_os'] =~ /darwin/i
     end
 
+    def lion?
+      Config::CONFIG['target_os'] =~ /darwin11/i
+    end
+
     def linux?
       Config::CONFIG['target_os'] =~ /linux/i
     end
@@ -57,6 +61,9 @@ module FSSM::Support
     def rb_fsevent?
       begin
         require 'rb-fsevent'
+        if defined?(FSEvent::VERSION)
+          FSEvent::VERSION.to_f >= 0.4
+        end
         true
       rescue LoadError
         false

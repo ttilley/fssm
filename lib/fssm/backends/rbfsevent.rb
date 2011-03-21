@@ -1,25 +1,41 @@
 module FSSM::Backends
   class RBFSEvent
     def initialize
-      @fsevent = FSEvent.new
+      @handlers = []
     end
 
     def add_handler(handler, preload=true)
-      @fsevent.watch handler.path.to_s do |paths|
-        paths.each do |path|
-          handler.refresh(path)
-        end
-      end
-
+      @handlers << handler
       handler.refresh(nil, true) if preload
     end
 
     def run
       begin
+        @fsevent = FSEvent.new
+        @fsevent.watch(temporary_multipath_hack) do |paths|
+          paths.each do |path|
+            temporary_multipath_handler(path)
+          end
+        end
         @fsevent.run
       rescue Interrupt
         @fsevent.stop
       end
+    end
+
+    def temporary_multipath_handler(path)
+      @handlers.each do |handler|
+        handler_path = File.join(handler.path.to_s, "")
+        if handler_path.start_with?(path)
+          handler.refresh(path)
+          break
+        end
+      end
+    end
+
+    def temporary_multipath_hack
+      @handlers = @handlers.sort {|x,y| y.path.to_pathname.segments.length <=> x.path.to_pathname.segments.length}
+      return @handlers.map {|handler| handler.path.to_s}
     end
 
   end
