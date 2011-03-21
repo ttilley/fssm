@@ -61,10 +61,7 @@ module FSSM::Support
     def rb_fsevent?
       begin
         require 'rb-fsevent'
-        if defined?(FSEvent::VERSION)
-          FSEvent::VERSION.to_f >= 0.4
-        end
-        true
+        defined?(FSEvent::VERSION) ? FSEvent::VERSION.to_f >= 0.4 : false
       rescue LoadError
         false
       end
