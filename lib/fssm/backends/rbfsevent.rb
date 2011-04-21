@@ -26,7 +26,7 @@ module FSSM::Backends
     def temporary_multipath_handler(path)
       @handlers.each do |handler|
         handler_path = File.join(handler.path.to_s, "")
-        if handler_path.start_with?(path)
+        if path.start_with?(handler_path)
           handler.refresh(path)
           break
         end
