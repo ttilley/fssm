@@ -1,3 +1,6 @@
+# When I wrote this, only god and I understood what I was doing.
+# Now... only god knows. - Karl Weierstrass
+
 module FSSM::Tree
   module NodeBase
     def initialize
