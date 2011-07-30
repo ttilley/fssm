@@ -1,4 +1,8 @@
-# FSSM ![project status](http://stillmaintained.com/ttilley/fssm.png) #
+# FSSM #
+
+![project status](http://stillmaintained.com/ttilley/fssm.png)
+
+[![Build Status](http://travis-ci.org/ttilley/fssm.png)](http://travis-ci.org/ttilley/fssm)
 
 Monitor API
 ===========
