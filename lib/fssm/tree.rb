@@ -1,6 +1,13 @@
 # When I wrote this, only god and I understood what I was doing.
 # Now... only god knows. - Karl Weierstrass
 
+# TODO: the single largest optimization here is likely to be prefix compression,
+#       which may break :directories support even further than it already is
+# TODO: stop blowing away entire subsections of the tree from other code. while
+#       simple to write, not all projects have predictably shallow directory
+#       structures like your average sass/compass project (the primary
+#       use-case for this library).
+
 module FSSM::Tree
   module NodeBase
     def initialize
@@ -152,16 +159,20 @@ module FSSM::Tree
       super(path)
     end
 
-    def files
-      ftype('file')
+    def empty(&block)
+      ftype(nil, &block)
     end
 
-    def directories
-      ftype('directory')
+    def files(&block)
+      ftype('file', &block)
     end
 
-    def links
-      ftype('link')
+    def directories(&block)
+      ftype('directory', &block)
+    end
+
+    def links(&block)
+      ftype('link', &block)
     end
 
     alias symlinks links
@@ -170,6 +181,7 @@ module FSSM::Tree
 
     def ftype(ft)
       inject({}) do |hash, (path, node)|
+        yield path, node if block_given?
         hash["#{path}"] = node.mtime if node.ftype == ft
         hash
       end
