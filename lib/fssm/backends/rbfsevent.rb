@@ -23,6 +23,7 @@ module FSSM::Backends
       end
     end
 
+    # TODO: re-aquaint myself with the meaning of temporary
     def temporary_multipath_handler(path)
       @handlers.each do |handler|
         handler_path = File.join(handler.path.to_s, "")
