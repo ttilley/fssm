@@ -4,6 +4,8 @@
 
 [![Build Status](http://travis-ci.org/ttilley/fssm.png)](http://travis-ci.org/ttilley/fssm)
 
+(Only JRuby and Rubinius reliably complete the test suite via travis-ci for reasons unknown to me, as things seem to work via MRI here. My test suite, however, is in dire need of refactoring to begin with.)
+
 Monitor API
 ===========
 
