@@ -57,7 +57,10 @@ class FSSM::Path
   end
 
   def set_callback(type, arg)
-    raise ArgumentError, "Proc expected" unless arg.is_a?(Proc)
+    unless arg.is_a?(Proc) || arg.respond_to?('call')
+      raise ArgumentError, "Proc-like object expected"
+    end
+
     @callbacks[type] = arg
   end
 
