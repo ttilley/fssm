@@ -4,7 +4,7 @@
 
 [![Build Status](http://travis-ci.org/ttilley/fssm.png)](http://travis-ci.org/ttilley/fssm)
 
-(Only JRuby and Rubinius reliably complete the test suite via travis-ci for reasons unknown to me, as things seem to work via MRI here. My test suite, however, is in dire need of refactoring to begin with.)
+Only JRuby currently passes the test suite as-is with full native platform functionality on linux. This is, for the most part, a combination of threading issues and a crappy test suite. On OSX, all commonly used ruby implementations pass with flying colors and full native functionality. If nothing else, this result is sufficient motivation to get around to a number of cleanup tasks I've let pile up and devise a more comprehensive (and realistic) test suite.
 
 Monitor API
 ===========
