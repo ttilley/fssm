@@ -10,6 +10,8 @@ module FSSM::Support
                    'RBFSEvent'
                  when linux? && rb_inotify?
                    'Inotify'
+                 when windows?
+                   'RBFchange'
                  else
                    'Polling'
                end
@@ -46,6 +48,10 @@ module FSSM::Support
 
     def linux?
       RbConfig::CONFIG['target_os'] =~ /linux/i
+    end
+    
+    def windows?
+      RbConfig::CONFIG['target_os'] =~ /mswin|mingw/i
     end
 
     def carbon_core?
