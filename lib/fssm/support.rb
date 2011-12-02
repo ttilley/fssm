@@ -3,29 +3,24 @@ require 'rbconfig'
 module FSSM::Support
   class << self
     def usable_backend
-      choice = case
-                 when mac? && !lion? && !jruby? && carbon_core?
-                   'FSEvents'
-                 when mac? && rb_fsevent?
-                   'RBFSEvent'
-                 when linux? && rb_inotify?
-                   'Inotify'
-                 else
-                   'Polling'
-               end
-
-      if (mac? || linux?) && choice == 'Polling'
-        optimal = case
-                    when mac?
-                      'rb-fsevent'
-                    when linux?
-                      'rb-inotify'
-                  end
-        FSSM.dbg("An optimized backend is available for this platform!")
-        FSSM.dbg("    gem install #{optimal}")
+      case
+        when mac? && !lion? && !jruby? && carbon_core?
+          'FSEvents'
+        when mac? && rb_fsevent?
+          'RBFSEvent'
+        when linux? && rb_inotify?
+          'Inotify'
+        else
+          'Polling'
       end
-
-      choice
+    end
+    
+    def optimal_backend_dependency
+      return case
+        when mac?     then  ['rb-fsevent', '>= 0.4.3.1']
+        when linux?   then  ['rb-inotify', '>= 0.8.8']
+        else                [nil, nil]
+      end
     end
 
     def backend
