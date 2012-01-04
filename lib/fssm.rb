@@ -1,4 +1,4 @@
-dir = File.dirname(__FILE__)
+dir = File.expand_path(File.dirname(__FILE__))
 $LOAD_PATH.unshift dir unless $LOAD_PATH.include?(dir)
 
 require 'thread'
