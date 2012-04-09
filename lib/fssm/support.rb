@@ -4,8 +4,6 @@ module FSSM::Support
   class << self
     def usable_backend
       case
-        when mac? && !lion? && !jruby? && carbon_core?
-          'FSEvents'
         when mac? && rb_fsevent?
           'RBFSEvent'
         when linux? && rb_inotify?
@@ -41,16 +39,6 @@ module FSSM::Support
 
     def linux?
       RbConfig::CONFIG['target_os'] =~ /linux/i
-    end
-
-    def carbon_core?
-      begin
-        require 'osx/foundation'
-        OSX.require_framework '/System/Library/Frameworks/CoreServices.framework/Frameworks/CarbonCore.framework'
-        true
-      rescue LoadError
-        false
-      end
     end
 
     def rb_fsevent?
