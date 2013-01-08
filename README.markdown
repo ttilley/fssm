@@ -1,4 +1,4 @@
-# FSSM ![project status](http://stillmaintained.com/ttilley/fssm.png) #
+# FSSM - currently unmaintained #
 
 Monitor API
 ===========
