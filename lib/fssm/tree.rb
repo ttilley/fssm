@@ -36,7 +36,7 @@ module FSSM::Tree
         cprefix = prefix ?
             FSSM::Pathname.for(prefix).join(segment) :
             FSSM::Pathname.for(segment)
-        block.call([cprefix, node])
+        yield [cprefix, node]
         node.each(cprefix, &block)
       end
     end
