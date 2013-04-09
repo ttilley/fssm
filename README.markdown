@@ -81,3 +81,12 @@ you get this:
     end
 
 The value of `type` argument is either `:file` or `:directory`.
+
+
+Donations
+=========
+
+FSSM is truly free software. The license is quite liberal (you don't even have to contribute back your changes). If, however, you'd like to donate as a way of showing support for the project and its continued development:
+
+[![Donate Bitcoins](https://d2o7j92jk8qjiw.cloudfront.net/assets/buttons/donation_small-2d08f8cd93c98acf496e0411cc6a5262.png)](https://coinbase.com/checkouts/5233986321e2217499bd6ef91f679aa4?c=FSSM)
+
