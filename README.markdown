@@ -1,5 +1,7 @@
 # FSSM - currently unmaintained #
 
+[![endorse](https://api.coderwall.com/ttilley/endorsecount.png)](https://coderwall.com/ttilley)
+
 Monitor API
 ===========
 
