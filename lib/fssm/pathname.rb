@@ -20,10 +20,12 @@ module FSSM
 
     def segments
       path  = to_s
-      array = path.split(File::SEPARATOR)
-      array.delete('')
-      array.insert(0, File::SEPARATOR) if path[0, 1] == File::SEPARATOR
-      array[0] += File::SEPARATOR if path[0, 3] =~ SEPARATOR_PAT
+      array = []
+      while !Pathname.new(path).root? && !path.empty?
+        array.unshift File.basename(path)
+        path        = File.dirname(path)
+      end
+      array.unshift path unless path.empty?
       array
     end
 
