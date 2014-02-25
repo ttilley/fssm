@@ -21,11 +21,13 @@ module FSSM
     def segments
       path  = to_s
       array = []
-      while !Pathname.new(path).root? && !path.empty?
+      curdir = File.dirname("")
+      while !Pathname.new(path).root? && !(path.empty? || path == curdir)
         array.unshift File.basename(path)
         path        = File.dirname(path)
       end
-      array.unshift path unless path.empty?
+      suffix = path[-1] =~ Pathname::SEPARATOR_PAT ? "" : File::SEPARATOR
+      array.unshift "#{path}#{suffix}" unless path.empty? || path == curdir
       array
     end
 
