@@ -59,7 +59,7 @@ describe "The File System State Monitor" do
       it "should call create callback upon file creation" do
         run_monitor(1) do
           file = @tmp_dir + "/newfile.rb"
-          File.exists?(file).should be_false
+          File.exists?(file).should be_falsey
           FileUtils.touch file
         end
         @handler_results[:create].should == [[@tmp_dir, 'newfile.rb']]
