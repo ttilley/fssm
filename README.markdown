@@ -7,9 +7,9 @@ Monitor API
 
 There are three ways you can run the monitor.
 
-1. call monitor with a path parameter, and define callbacks in a block
-2. call monitor with a block to configure multiple paths and callbacks
-3. create a monitor object and run each step manually
+1. Call monitor with a path parameter, and define callbacks in a block
+2. Call monitor with a block to configure multiple paths and callbacks
+3. Create a monitor object and run each step manually
 
 Monitor with path
 -----------------
