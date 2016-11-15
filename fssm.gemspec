@@ -12,6 +12,7 @@ Gem::Specification.new do |s|
   s.homepage          = "https://github.com/ttilley/fssm"
   s.summary           = %q{File System State Monitor}
   s.description       = %q{The File System State Monitor keeps track of the state of any number of paths and will fire events when said state changes (create/update/delete). FSSM supports using FSEvents on MacOS, Inotify on GNU/Linux, and polling anywhere else.}
+  s.license           = 'MIT'
 
   s.rubyforge_project = "fssm"
 
