@@ -12,7 +12,7 @@ module FSSM::Support
           'Polling'
       end
     end
-    
+
     def optimal_backend_dependency
       return case
         when mac?     then  ['rb-fsevent', '>= 0.4.3.1']
@@ -54,7 +54,11 @@ module FSSM::Support
       begin
         require 'rb-inotify'
         if defined?(INotify::VERSION)
-          version = INotify::VERSION
+          if INotify::VERSION.is_a?(Array)
+            version = INotify::VERSION
+          else
+            version = INotify::VERSION.split('.').map(&:to_i)
+          end
           version[0] > 0 || version[1] >= 6
         end
       rescue LoadError
